@@ -1,0 +1,51 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context-4.0.xsd ">
+	<context:property-placeholder
+		location="file:D:\dbreactiveworks.properties"></context:property-placeholder>
+	<bean id="user" class="com.reactiveworks.userproduct.model.User"></bean>
+	<bean id="product"
+		class="com.reactiveworks.userproduct.model.Product"></bean>
+	<bean id="userdaofactory"
+		class="com.reactiveworks.userproduct.factory.UserDAOFactory"
+		autowire="byType"></bean>
+	<bean id="productdaofactory"
+		class="com.reactiveworks.userproduct.factory.ProductDAOFactory"
+		autowire="byType"></bean>
+	<bean id="userdbdaoimpl"
+		class="com.reactiveworks.userproduct.db.impl.UserDBDAOImpl"
+		autowire="constructor"></bean>
+	<bean id="usercsvdaoimpl"
+		class="com.reactiveworks.userproduct.csv.impl.UserCSVDAOImpl"></bean>
+	<bean id="productDbDao"
+		class="com.reactiveworks.userproduct.db.impl.ProductDBDAOImpl"
+		autowire="constructor"></bean>
+	<bean id="productcsvDao"
+		class="com.reactiveworks.userproduct.csv.impl.ProductCSVDAOImpl"></bean>
+	<!-- <bean id="productAvailabilityService"
+		class="com.reactiveworks.userproduct.services.impl.ProductAvailabilityService"
+		autowire="constructor"></bean> -->
+	<bean id="mySqlBasicDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>${driver}</value>
+		</property>
+		<property name="url">
+			<value>${url}</value>
+		</property>
+		<property name="username">
+			<value>${user}</value>
+		</property>
+		<property name="password">
+			<value>${password}</value>
+		</property>
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	<constructor-arg ref="mySqlBasicDataSource"></constructor-arg>
+	</bean>
+</beans>
