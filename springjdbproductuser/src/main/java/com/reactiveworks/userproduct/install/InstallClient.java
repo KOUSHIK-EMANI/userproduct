@@ -10,11 +10,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.reactiveworks.userproduct.csv.exceptions.DataSourceOperationNotSupportException;
 import com.reactiveworks.userproduct.csv.exceptions.DataSourceReadException;
-import com.reactiveworks.userproduct.dao.interfaces.IProductDAO;
+import com.reactiveworks.userproduct.dao.interfaces.IUserDAO;
 import com.reactiveworks.userproduct.db.exceptions.DataBaseAccessException;
 import com.reactiveworks.userproduct.exceptions.UserIdInvalidException;
-import com.reactiveworks.userproduct.factory.ProductDAOFactory;
-import com.reactiveworks.userproduct.model.Product;
+import com.reactiveworks.userproduct.factory.UserDAOFactory;
 import com.reactiveworks.userproduct.model.User;
 
 /**
@@ -44,21 +43,9 @@ public class InstallClient {
 			throw new DataSourceReadException("Unable to load the properties file ", e);
 		}
 		ApplicationContext application = new ClassPathXmlApplicationContext(filepath);
-		/*UserDAOFactory daofactory = application.getBean("userdaofactory", UserDAOFactory.class);
+		UserDAOFactory daofactory = application.getBean("userdaofactory", UserDAOFactory.class);
 		IUserDAO instanceOfUser = daofactory.getInstance(propertie.getProperty(FILE_TYPE));
-		List<User> userData = instanceOfUser.getUserData();
-		for (User user : userData) {
-			System.out.println(user);
-		}
-*/
-		ProductDAOFactory daofactory = application.getBean("productdaofactory", ProductDAOFactory.class);
-		System.out.println(daofactory);
-		IProductDAO instanceOfUser = daofactory.getInstance(propertie.getProperty(FILE_TYPE));
-		System.out.println(instanceOfUser);
-		List<Product> userData = instanceOfUser.getProductData();
-		for (Product user : userData) {
-			System.out.println(user);
-		}
+		instanceOfUser.addUser(null);
 	}
 
 }

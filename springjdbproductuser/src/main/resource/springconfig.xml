@@ -2,12 +2,28 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+     http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+   http://www.springframework.org/schema/tx
+   http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
    http://www.springframework.org/schema/context
    http://www.springframework.org/schema/context/spring-context-4.0.xsd ">
 	<context:property-placeholder
 		location="file:D:\dbreactiveworks.properties"></context:property-placeholder>
+	<aop:config proxy-target-class="true">
+		<aop:advisor advice-ref="transactionAdviser"
+			pointcut="execution(* com.reactiveworks.userproduct.db.impl.UserDBDAOImpl.add*(..))" />
+	</aop:config>
+	<tx:advice id="transactionAdviser">
+		<tx:attributes>
+			<tx:method name="add*" isolation="READ_COMMITTED"
+				propagation="REQUIRED" rollback-for="java.lang.Exception" read-only="false" timeout="-1" />
+		</tx:attributes>
+	</tx:advice>
 	<bean id="user" class="com.reactiveworks.userproduct.model.User"></bean>
 	<bean id="product"
 		class="com.reactiveworks.userproduct.model.Product"></bean>
@@ -27,9 +43,9 @@
 		autowire="constructor"></bean>
 	<bean id="productcsvDao"
 		class="com.reactiveworks.userproduct.csv.impl.ProductCSVDAOImpl"></bean>
-	<!-- <bean id="productAvailabilityService"
+	<bean id="productAvailabilityService"
 		class="com.reactiveworks.userproduct.services.impl.ProductAvailabilityService"
-		autowire="constructor"></bean> -->
+		autowire="constructor"></bean>
 	<bean id="mySqlBasicDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName">
@@ -45,7 +61,13 @@
 			<value>${password}</value>
 		</property>
 	</bean>
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-	<constructor-arg ref="mySqlBasicDataSource"></constructor-arg>
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="mySqlBasicDataSource"></constructor-arg>
+	</bean>
+	<bean
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		id="transactionManager">
+		<property name="dataSource" ref="mySqlBasicDataSource"></property>
 	</bean>
 </beans>

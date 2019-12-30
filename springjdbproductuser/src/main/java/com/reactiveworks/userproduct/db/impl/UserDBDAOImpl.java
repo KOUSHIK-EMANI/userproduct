@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.reactiveworks.userproduct.dao.interfaces.IUserDAO;
 import com.reactiveworks.userproduct.db.exceptions.DataBaseAccessException;
 import com.reactiveworks.userproduct.model.User;
-
 /**
  * UserDBDAOImpl class will perform the database Query operations
  * 
@@ -26,7 +25,6 @@ public class UserDBDAOImpl implements IUserDAO {
 	private final static String SELECT_QUERY_WHERE = "SELECT * FROM USER WHERE USERID = ?";
 	private final static String DELETE_QUERY = "DELETE FROM USER WHERE USERID = ?";
 	private JdbcTemplate jdbcTemplate;
-
 	/**
 	 * Get the instance of DBCPDataSource from spring container through constructor
 	 * setter method
@@ -62,7 +60,7 @@ public class UserDBDAOImpl implements IUserDAO {
 		List<User> queryList;
 		try {
 			queryList = jdbcTemplate.query(SELECT_QUERY, new UserRowMapper());
-	
+
 		} catch (DataAccessException e) {
 			throw new DataBaseAccessException("unable to get the user details", e);
 		}
@@ -74,7 +72,8 @@ public class UserDBDAOImpl implements IUserDAO {
 	 */
 	@Override
 	public User getUser(String userId1) throws DataBaseAccessException {
-		return null;
+		User user=jdbcTemplate.queryForObject(SELECT_QUERY_WHERE,new Object[] {userId1},new UserRowMapper());
+		return user;
 	}// ... end of getUser
 
 	/**
@@ -82,6 +81,11 @@ public class UserDBDAOImpl implements IUserDAO {
 	 */
 	@Override
 	public void updateUser(User user) throws DataBaseAccessException {
+		try {
+			jdbcTemplate.update(UPDATE_QUERY, new Object[] { user.getUserName(), user.getUserId() });
+		} catch (DataAccessException e) {
+			throw new DataBaseAccessException("unable to update the user details", e);
+		}
 	}// ...end of updateUser
 
 	/**
@@ -89,5 +93,6 @@ public class UserDBDAOImpl implements IUserDAO {
 	 */
 	@Override
 	public void removeUser(User user) throws DataBaseAccessException {
+		jdbcTemplate.update(DELETE_QUERY, new Object[] { user.getUserId() });
 	}// ...end of removeUser
 }

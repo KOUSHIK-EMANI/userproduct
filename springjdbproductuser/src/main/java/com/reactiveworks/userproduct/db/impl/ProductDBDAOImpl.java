@@ -61,9 +61,6 @@ public class ProductDBDAOImpl implements IProductDAO {
 		List<Product> lstproduct = new ArrayList<Product>();
 		List<Product> query = jdbcTemplate.query(SELECT_PRODUCT_QUERY_LIST, new ProductRowMapper());
 		for (Product product : query) {
-			System.out.println(product);
-		}
-		for (Product product : query) {
 			if (lstproduct.isEmpty()) {
 				lstproduct.add(product);
 			} else {
@@ -83,7 +80,6 @@ public class ProductDBDAOImpl implements IProductDAO {
 				}
 			}
 		} // ... end of while loop
-		LOGGER.debug("exit form getProductData()");
 		return lstproduct;
 	}// ...end of getProductData
 }
