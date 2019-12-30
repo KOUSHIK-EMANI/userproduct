@@ -2,10 +2,10 @@ package com.reactiveworks.userproduct.install;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.reactiveworks.userproduct.csv.exceptions.DataSourceOperationNotSupportException;
@@ -14,7 +14,6 @@ import com.reactiveworks.userproduct.dao.interfaces.IUserDAO;
 import com.reactiveworks.userproduct.db.exceptions.DataBaseAccessException;
 import com.reactiveworks.userproduct.exceptions.UserIdInvalidException;
 import com.reactiveworks.userproduct.factory.UserDAOFactory;
-import com.reactiveworks.userproduct.model.User;
 
 /**
  * Install Client class has spring IOC cotainer to instantiate the classes
@@ -46,6 +45,7 @@ public class InstallClient {
 		UserDAOFactory daofactory = application.getBean("userdaofactory", UserDAOFactory.class);
 		IUserDAO instanceOfUser = daofactory.getInstance(propertie.getProperty(FILE_TYPE));
 		instanceOfUser.addUser(null);
+		((AbstractApplicationContext) application).close();
 	}
 
 }

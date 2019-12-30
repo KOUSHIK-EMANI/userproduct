@@ -1,15 +1,10 @@
 package com.reactiveworks.userproduct.db.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.reactiveworks.userproduct.csv.exceptions.DataSourceReadException;
@@ -42,20 +37,14 @@ public class ProductDBDAOImpl implements IProductDAO {
 	public void addProduct(Product product) throws DataBaseAccessException {
 		LOGGER.debug("Inserting a single row into a database table");
 		LOGGER.info("values of product " + product.getProductId());
-		Connection connection = null;
-		PreparedStatement prepareStatement = null;
-
+		Object[] insert = new Object[] { product.getProductId(), product.getProductName(),
+				product.getProductCategory() };
 		try {
-			prepareStatement = connection.prepareStatement(INSERT_PRODUCT);
-			prepareStatement.setString(1, product.getProductId());
-			prepareStatement.setString(2, product.getProductName());
-			prepareStatement.setString(3, product.getProductCategory());
-			prepareStatement.executeUpdate();
-		} catch (SQLException e) {
+			jdbcTemplate.update(INSERT_PRODUCT, insert);
+		} catch (DataAccessException e) {
 			throw new DataBaseAccessException("unable to do the transaction " + e);
 		}
 	}// ...end of addProduct
-
 	@Override
 	public List<Product> getProductData() throws DataSourceReadException, DataBaseAccessException {
 		List<Product> lstproduct = new ArrayList<Product>();

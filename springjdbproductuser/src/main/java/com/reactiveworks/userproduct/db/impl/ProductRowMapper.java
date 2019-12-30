@@ -8,10 +8,10 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.reactiveworks.userproduct.model.Product;
 
-public class ProductRowMapper implements RowMapper {
+public class ProductRowMapper implements RowMapper<Product> {
 
 	@Override
-	public Object mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+	public Product mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 		Product product = new Product();
 		product.setProductId(resultSet.getString(1));
 		product.setProductName(resultSet.getString(2));
