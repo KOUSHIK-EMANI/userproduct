@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.reactiveworks.userproduct.dao.interfaces.IUserDAO;
 import com.reactiveworks.userproduct.db.exceptions.DataBaseAccessException;
 import com.reactiveworks.userproduct.model.User;
+
 /**
  * UserDBDAOImpl class will perform the database Query operations
  * 
@@ -25,6 +26,7 @@ public class UserDBDAOImpl implements IUserDAO {
 	private final static String SELECT_QUERY_WHERE = "SELECT * FROM USER WHERE USERID = ?";
 	private final static String DELETE_QUERY = "DELETE FROM USER WHERE USERID = ?";
 	private JdbcTemplate jdbcTemplate;
+
 	/**
 	 * Get the instance of DBCPDataSource from spring container through constructor
 	 * setter method
@@ -72,7 +74,7 @@ public class UserDBDAOImpl implements IUserDAO {
 	 */
 	@Override
 	public User getUser(String userId1) throws DataBaseAccessException {
-		User user=jdbcTemplate.queryForObject(SELECT_QUERY_WHERE,new Object[] {userId1},new UserRowMapper());
+		User user = jdbcTemplate.queryForObject(SELECT_QUERY_WHERE, new Object[] { userId1 }, new UserRowMapper());
 		return user;
 	}// ... end of getUser
 

@@ -2,6 +2,7 @@ package com.reactiveworks.userproduct.install;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 import org.springframework.context.ApplicationContext;
@@ -10,10 +11,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.reactiveworks.userproduct.csv.exceptions.DataSourceOperationNotSupportException;
 import com.reactiveworks.userproduct.csv.exceptions.DataSourceReadException;
-import com.reactiveworks.userproduct.dao.interfaces.IUserDAO;
 import com.reactiveworks.userproduct.db.exceptions.DataBaseAccessException;
 import com.reactiveworks.userproduct.exceptions.UserIdInvalidException;
-import com.reactiveworks.userproduct.factory.UserDAOFactory;
+import com.reactiveworks.userproduct.model.Product;
+import com.reactiveworks.userproduct.services.impl.ProductAvailabilityService;
 
 /**
  * Install Client class has spring IOC cotainer to instantiate the classes
@@ -42,9 +43,13 @@ public class InstallClient {
 			throw new DataSourceReadException("Unable to load the properties file ", e);
 		}
 		ApplicationContext application = new ClassPathXmlApplicationContext(filepath);
-		UserDAOFactory daofactory = application.getBean("userdaofactory", UserDAOFactory.class);
-		IUserDAO instanceOfUser = daofactory.getInstance(propertie.getProperty(FILE_TYPE));
-		instanceOfUser.addUser(null);
+		ProductAvailabilityService productAvailabilityService = application.getBean("productAvailabilityService",
+				ProductAvailabilityService.class);
+		List<Product> allProductForUser = productAvailabilityService.getAllProductForUser("U1007");
+
+		for (Product user : allProductForUser) {
+			System.out.println(user);
+		}
 		((AbstractApplicationContext) application).close();
 	}
 
