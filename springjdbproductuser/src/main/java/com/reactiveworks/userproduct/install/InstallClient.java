@@ -45,11 +45,8 @@ public class InstallClient {
 		ApplicationContext application = new ClassPathXmlApplicationContext(filepath);
 		ProductAvailabilityService productAvailabilityService = application.getBean("productAvailabilityService",
 				ProductAvailabilityService.class);
-		List<Product> allProductForUser = productAvailabilityService.getAllProductForUser("U1007");
+		productAvailabilityService.getAllProductForUser("U1007");
 
-		for (Product user : allProductForUser) {
-			System.out.println(user);
-		}
 		((AbstractApplicationContext) application).close();
 	}
 
