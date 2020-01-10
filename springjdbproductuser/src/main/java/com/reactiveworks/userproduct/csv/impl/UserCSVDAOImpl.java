@@ -21,7 +21,7 @@ import com.reactiveworks.userproduct.model.User;
  */
 public class UserCSVDAOImpl implements IUserDAO {
 	private static final Logger LOGGER = Logger.getLogger(UserCSVDAOImpl.class);
-	public static final String FILE_NAME = "User.csv";
+	public static final String FILE_NAME  = "User.csv";
 /**
  * This method throw exception when we perform add operation in csv file
  */
